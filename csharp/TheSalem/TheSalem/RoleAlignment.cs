@@ -24,5 +24,6 @@ namespace TheSalem
         #endregion
 
         public override string ToString() => $"{Faction} {Alignment}";
+        public override int GetHashCode() => ((int)Faction) | ((int)Alignment << 2);
     }
 }
