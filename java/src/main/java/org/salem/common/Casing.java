@@ -9,7 +9,7 @@ public final class Casing
         if (camelCaseString == null)
             throw new IllegalArgumentException("The string must not be null.");
 
-        if (camelCaseString.length() == 0)
+        if (camelCaseString.length() < 2)
             return camelCaseString;
 
         var indexList = new ArrayList<Integer>()
