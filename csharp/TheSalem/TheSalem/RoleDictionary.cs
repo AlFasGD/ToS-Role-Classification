@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace TheSalem
 {
@@ -12,14 +11,13 @@ namespace TheSalem
     public class RoleDictionary : IEnumerable<Type>
     {
         private static readonly RoleDictionary defaultDictionary;
-        private static readonly FlexibleDictionary<Type, Role> roleTypeInstances = new();
 
         /// <summary>Initializes a new role type dictionary with all the avaiable roles in the game.</summary>
         public static RoleDictionary AllAvailableRolesDictionary => new(defaultDictionary);
 
         static RoleDictionary()
         {
-            defaultDictionary = new(Assembly.GetExecutingAssembly());
+            defaultDictionary = new(RoleInstancePool.Instance.AllRoleTypes.Keys);
         }
 
         // Consider using FlexibleHashSetDictionary, once they are added to Garyon
@@ -29,21 +27,28 @@ namespace TheSalem
         /// <summary>Gets all the available role types in the game.</summary>
         public IEnumerable<Type> AllRoleTypes => roleTypesByAlignment.Values.Flatten();
         /// <summary>Gets all the available role types in the game that the player can start as.</summary>
-        public IEnumerable<Type> AllStartableRoleTypes => AllRoleTypes.Where(t => roleTypeInstances[t].CanStartAs);
-
-        private RoleDictionary(Assembly assembly)
-            : this()
-        {
-            var roleTypes = assembly.GetTypes().Where(IsValidRoleType);
-            foreach (var t in roleTypes)
-                AddConditionallyChecked(t, false);
-        }
+        public IEnumerable<Type> AllStartableRoleTypes => AllRoleTypes.Where(t => RoleInstancePool.Instance[t].CanStartAs);
 
         /// <summary>Initializes a new instance of the <seealso cref="RoleDictionary"/> class with no roles.</summary>
         public RoleDictionary()
         {
             roleTypesByAlignment = new();
             roleTypesByFaction = new();
+        }
+        /// <summary>Initializes a new instance of the <seealso cref="RoleDictionary"/> class with the roles from the specified types.</summary>
+        /// <param name="roleTypes">The types of the roles to add to the dictionary.</param>
+        public RoleDictionary(IEnumerable<Type> roleTypes)
+        {
+            roleTypes = roleTypes.Where(Role.IsValidRoleType);
+            foreach (var t in roleTypes)
+                AddConditionallyChecked(t, false);
+        }
+        /// <summary>Initializes a new instance of the <seealso cref="RoleDictionary"/> class with the roles from the specified <seealso cref="Role"/> instances.</summary>
+        /// <param name="roles">The instances of the roles to add to the dictionary.</param>
+        public RoleDictionary(IEnumerable<Role> roles)
+        {
+            foreach (var r in roles)
+                AddConditionallyChecked(r.GetType(), false);
         }
         /// <summary>Initializes a new instance of the <seealso cref="RoleDictionary"/> class from another <seealso cref="RoleDictionary"/> insatnce.</summary>
         /// <param name="other">The other <seealso cref="RoleDictionary"/> instance to copy.</param>
@@ -65,7 +70,7 @@ namespace TheSalem
         /// <returns><see langword="true"/> if the role type was successfully removed, otherwise <see langword="false"/>.</returns>
         public bool Remove(Type role)
         {
-            var instance = roleTypeInstances[role];
+            var instance = RoleInstancePool.Instance[role];
             if (instance == null)
                 return false;
 
@@ -104,7 +109,7 @@ namespace TheSalem
             RemoveRange(rolesToRemove);
         }
         /// <summary>Removes all role types that belong to the specified alignment from this dictionary.</summary>
-        /// <param name="faction">The alignment that the roles to remove belong to.</param>
+        /// <param name="alignment">The alignment that the roles to remove belong to.</param>
         public void ClearAlignment(RoleAlignment alignment)
         {
             var rolesToRemove = roleTypesByAlignment[alignment].ToArray();
@@ -114,13 +119,10 @@ namespace TheSalem
         private bool AddConditionallyChecked(Type role, bool check)
         {
             if (check)
-                if (!IsValidRoleType(role))
+                if (!Role.IsValidRoleType(role))
                     return false;
 
-            if (roleTypeInstances[role] == null)
-                roleTypeInstances[role] = role.GetConstructor(Type.EmptyTypes).Invoke(null) as Role;
-
-            var instance = roleTypeInstances[role];
+            var instance = RoleInstancePool.Instance[role];
 
             roleTypesByAlignment.Add(instance.FullAlignment, role);
             roleTypesByFaction.Add(instance.Faction, role);
@@ -142,6 +144,5 @@ namespace TheSalem
         /// <returns>A collection of elements that belong to the provided alignment.</returns>
         public IEnumerable<Type> this[RoleAlignment alignment] => roleTypesByAlignment[alignment].ToArray();
 
-        private static bool IsValidRoleType(Type type) => type.IsSealed && type.IsAssignableTo(typeof(Role));
     }
 }

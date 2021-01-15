@@ -20,5 +20,7 @@ namespace TheSalem
 
         public virtual bool CovenDLCExclusive => false;
         public virtual bool NotInCovenDLC => false;
+
+        public static bool IsValidRoleType(Type type) => type.IsSealed && type.IsAssignableTo(typeof(Role));
     }
 }
