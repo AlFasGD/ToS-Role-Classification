@@ -2,7 +2,7 @@
 {
     public abstract class MafiaDeception : MafiaNonKilling
     {
-        public override RoleAlignment FullAlignment => RoleAlignment.MafiaDeception;
+        public sealed override RoleAlignment FullAlignment => RoleAlignment.MafiaDeception;
     }
 
     public sealed class Disguiser : MafiaDeception { }
