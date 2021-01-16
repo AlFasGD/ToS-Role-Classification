@@ -2,25 +2,24 @@ package org.salem;
 
 import org.salem.common.Casing;
 
-public abstract class Role
+public interface Role
 {
-    public String getRoleName()
+    public default String getRoleName()
     {
-        return Casing.getCamelCaseWords(getClass().getName());
+        return Casing.getCamelCaseWords(getClass().getSimpleName());
     }
 
     public abstract RoleAlignment getFullAlignment();
-    public Faction getFaction() { return getFullAlignment().RoleFaction; }
-    public Alignment getAlignment() { return getFullAlignment().RoleAlignment; }
-    
-    public boolean canStartAs() { return true; }
-    public boolean isUnique() { return false; }
-    public int getMaximumOccurrences() { return isUnique() ? 1 : 15; }
-    
-    public boolean canPromote() { return promotesInto() != null; }
-    public Class<?> promotesInto() { return null; }
-    
-    public boolean covenDLCExclusive() { return false; }
-    public boolean unavailableInCovenDLC() { return false; }
-}
+    public default Faction getFaction() { return getFullAlignment().RoleFaction; }
+    public default Alignment getAlignment() { return getFullAlignment().RoleAlignment; }
 
+    public default boolean canStartAs() { return true; }
+    public default boolean isUnique() { return false; }
+    public default int getMaximumOccurrences() { return isUnique() ? 1 : 15; }
+
+    public default boolean canPromote() { return promotesInto() != null; }
+    public default Class<?> promotesInto() { return null; }
+
+    public default boolean covenDLCExclusive() { return false; }
+    public default boolean unavailableInCovenDLC() { return false; }
+}
