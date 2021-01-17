@@ -2,6 +2,8 @@ package org.salem;
 
 import org.salem.common.Casing;
 
+import java.lang.reflect.Modifier;
+
 public interface Role
 {
     public default String getRoleName()
@@ -22,4 +24,13 @@ public interface Role
 
     public default boolean covenDLCExclusive() { return false; }
     public default boolean unavailableInCovenDLC() { return false; }
+
+    public static <T extends Role> boolean isValidRoleType(Class<T> type)
+    {
+        int modifiers = type.getModifiers();
+        if ((modifiers & Modifier.FINAL) == 0)
+            return false;
+
+        return true;
+    }
 }
