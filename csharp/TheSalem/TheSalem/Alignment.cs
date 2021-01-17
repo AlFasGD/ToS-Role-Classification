@@ -2,6 +2,8 @@
 {
     public enum Alignment
     {
+        Any,
+
         // Town
         Investigative,
         Killing,

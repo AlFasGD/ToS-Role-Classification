@@ -1,8 +1,15 @@
 package org.salem;
 
-public class RoleAlignment
+public class RoleAlignment implements RoleListEntry
 {
     // Available role alignments
+    public static final RoleAlignment Any = new RoleAlignment();
+
+    public static final RoleAlignment TownAny = new RoleAlignment(Faction.Town);
+    public static final RoleAlignment MafiaAny = new RoleAlignment(Faction.Mafia);
+    public static final RoleAlignment CovenAny = new RoleAlignment(Faction.Coven);
+    public static final RoleAlignment NeutralAny = new RoleAlignment(Faction.Neutral);
+    
     public static final RoleAlignment TownInvestigative = new RoleAlignment(Faction.Town, Alignment.Investigative);
     public static final RoleAlignment TownKilling = new RoleAlignment(Faction.Town, Alignment.Killing);
     public static final RoleAlignment TownProtective = new RoleAlignment(Faction.Town, Alignment.Protective);
@@ -22,6 +29,14 @@ public class RoleAlignment
     public final Faction RoleFaction;
     public final Alignment RoleAlignment;
 
+    public RoleAlignment()
+    {
+        this(Faction.Any, Alignment.Any);
+    }
+    public RoleAlignment(Faction faction)
+    {
+        this(faction, Alignment.Any);
+    }
     public RoleAlignment(Faction faction, Alignment alignment)
     {
         RoleFaction = faction;
@@ -31,11 +46,14 @@ public class RoleAlignment
     @Override
     public String toString()
     {
+        if (RoleFaction == Faction.Any)
+            return "Any";
+
         return RoleFaction + " " + RoleAlignment;
     }
     @Override
     public int hashCode()
     {
-        return (RoleFaction.ordinal()) | (RoleAlignment.ordinal() << 2);
+        return (RoleFaction.ordinal()) | (RoleAlignment.ordinal() << 3);
     }
 }

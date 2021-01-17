@@ -3,7 +3,7 @@ using System;
 
 namespace TheSalem
 {
-    public abstract class Role
+    public abstract class Role : IRoleListEntry
     {
         public string Name => GetType().Name.GetPascalCaseWords().CombineWords();
 

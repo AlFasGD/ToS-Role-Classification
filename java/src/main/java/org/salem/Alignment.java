@@ -2,6 +2,8 @@ package org.salem;
 
 public enum Alignment
 {
+    Any,
+
     // Town
     Investigative,
     Killing,

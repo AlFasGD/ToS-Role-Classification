@@ -6,6 +6,13 @@ namespace TheSalem
     public record RoleAlignment(Faction Faction, Alignment Alignment)
     {
         #region Available role alignments
+        public static readonly RoleAlignment Any = new();
+
+        public static readonly RoleAlignment TownAny = new(Town);
+        public static readonly RoleAlignment MafiaAny = new(Mafia);
+        public static readonly RoleAlignment CovenAny = new(Coven);
+        public static readonly RoleAlignment NeutralAny = new(Neutral);
+
         public static readonly RoleAlignment TownInvestigative = new(Town, Investigative);
         public static readonly RoleAlignment TownKilling = new(Town, Killing);
         public static readonly RoleAlignment TownProtective = new(Town, Protective);
@@ -23,7 +30,18 @@ namespace TheSalem
         public static readonly RoleAlignment NeutralChaos = new(Neutral, Chaos);
         #endregion
 
-        public override string ToString() => $"{Faction} {Alignment}";
-        public override int GetHashCode() => ((int)Faction) | ((int)Alignment << 2);
+        public RoleAlignment()
+            : this(Faction.Any) { }
+        public RoleAlignment(Faction faction)
+            : this(faction, Alignment.Any) { }
+
+        public override string ToString()
+        {
+            if (Faction == Faction.Any)
+                return "Any";
+
+            return $"{Faction} {Alignment}";
+        }
+        public override int GetHashCode() => ((int)Faction) | ((int)Alignment << 3);
     }
 }

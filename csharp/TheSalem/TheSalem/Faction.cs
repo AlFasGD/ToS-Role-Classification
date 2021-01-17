@@ -2,6 +2,8 @@
 {
     public enum Faction
     {
+        Any,
+
         Town,
         Mafia,
         Coven,

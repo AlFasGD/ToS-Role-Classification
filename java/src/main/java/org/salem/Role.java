@@ -4,7 +4,7 @@ import org.salem.common.Casing;
 
 import java.lang.reflect.Modifier;
 
-public interface Role
+public interface Role extends RoleListEntry
 {
     public default String getRoleName()
     {
