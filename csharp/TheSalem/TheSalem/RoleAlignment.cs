@@ -1,9 +1,10 @@
-﻿using static TheSalem.Alignment;
+﻿using System;
+using static TheSalem.Alignment;
 using static TheSalem.Faction;
 
 namespace TheSalem
 {
-    public record RoleAlignment(Faction Faction, Alignment Alignment)
+    public record RoleAlignment(Faction Faction, Alignment Alignment) : IRoleSlot
     {
         #region Available role alignments
         public static readonly RoleAlignment Any = new();
@@ -32,12 +33,36 @@ namespace TheSalem
 
         public RoleAlignment()
             : this(Faction.Any) { }
+        public RoleAlignment(Alignment alignment)
+            : this(Faction.Any, alignment) { }
         public RoleAlignment(Faction faction)
             : this(faction, Alignment.Any) { }
 
+        public Role GenerateRandomRole(RoleDictionary availableRoles, Random random)
+        {
+            var roles = availableRoles[this];
+            return RoleInstancePool.Instance[roles[random.Next(roles.Length)]];
+        }
+
+        /// <summary>Determines whether this role alignment matches the given filter.</summary>
+        /// <param name="alignment">The alignent filter to check whether it matches this alignment.</param>
+        /// <returns><see langword="true"/> if the non-any fields of the alignment filter are equal to this alignment, otherwise <see langword="false"/>.</returns>
+        public bool MatchesFilter(RoleAlignment alignment)
+        {
+            if (alignment.Faction != Faction.Any)
+                if (alignment.Faction != Faction)
+                    return false;
+
+            if (alignment.Alignment != Alignment.Any)
+                if (alignment.Alignment != Alignment)
+                    return false;
+
+            return true;
+        }
+
         public override string ToString()
         {
-            if (Faction == Faction.Any)
+            if (this == Any)
                 return "Any";
 
             return $"{Faction} {Alignment}";
