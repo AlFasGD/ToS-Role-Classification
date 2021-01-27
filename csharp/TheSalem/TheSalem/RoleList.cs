@@ -58,14 +58,15 @@ namespace TheSalem
         }
 
         /// <summary>Determines whether this current role list is a valid one.</summary>
-        public bool IsValidRoleList(GamePackType packType) => ValidateRoleList(packType, out _);
+        /// <param name="packTypes">The game pack types where this role list is applied on.</param>
+        public bool IsValidRoleList(GamePackTypes packTypes) => ValidateRoleList(packTypes, out _);
 
         /// <summary>Generates a random role list from this given role list, replacing wildcard slots with randomly chosen ones fitting the given criteria.</summary>
-        /// <param name="packType">The game pack type where this role list is applied one.</param>
+        /// <param name="packTypes">The game pack types where this role list is applied on.</param>
         /// <returns>The generated role list if this role list is valid, otherwise <see langword="null"/>.</returns>
-        public RoleList GenerateRandomRoleList(GamePackType packType)
+        public RoleList GenerateRandomRoleList(GamePackTypes packTypes)
         {
-            return GenerateRandomRoleList(new RoleDictionary(RoleDictionary.AllAvailableRolesDictionary.GetAllStartableRoleTypes(packType)));
+            return GenerateRandomRoleList(new RoleDictionary(RoleDictionary.AllAvailableRolesDictionary.GetAllStartableRoleTypesIntersection(packTypes)));
         }
         /// <summary>Generates a random role list from this given role list, replacing wildcard slots with randomly chosen ones fitting the given criteria.</summary>
         /// <param name="availableRoles">The available roles dictionary.</param>
@@ -96,9 +97,9 @@ namespace TheSalem
             return new(resultingArray);
         }
 
-        private bool ValidateRoleList(GamePackType type, out ValueCounterDictionary<Type> remainingSlots)
+        private bool ValidateRoleList(GamePackTypes packTypes, out ValueCounterDictionary<Type> remainingSlots)
         {
-            return ValidateRoleList(new RoleDictionary(RoleDictionary.AllAvailableRolesDictionary.GetAllStartableRoleTypes(type)), out remainingSlots);
+            return ValidateRoleList(new RoleDictionary(RoleDictionary.AllAvailableRolesDictionary.GetAllStartableRoleTypesIntersection(packTypes)), out remainingSlots);
         }
         private bool ValidateRoleList(RoleDictionary availableRoles, out ValueCounterDictionary<Type> remainingSlots)
         {

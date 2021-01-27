@@ -64,17 +64,37 @@ namespace TheSalem
             roleTypesByFaction = new(other.roleTypesByFaction);
         }
 
-        /// <summary>Gets all the available role types in the provided game pack that the player can start as.</summary>
-        /// <param name="packType">The pack type of the game whose available startable roles to get.</param>
-        /// <returns>The collection of all the available role types in the provided game pack.</returns>
-        public IEnumerable<Type> GetAllStartableRoleTypes(GamePackType packType)
+        /// <summary>Gets all the available role types in the provided game packs that the player can start as.</summary>
+        /// <param name="packTypes">The game pack types of the game whose available startable roles to get.</param>
+        /// <returns>The collection of all the available role types in the provided game packs.</returns>
+        public IEnumerable<Type> GetAllStartableRoleTypes(GamePackTypes packTypes)
         {
-            return packType switch
+            return packTypes switch
             {
-                GamePackType.Classic => AllStartableClassicRoleTypes,
-                GamePackType.Coven => AllStartableCovenRoleTypes,
-                GamePackType.All => AllStartableRoleTypes,
+                GamePackTypes.Classic => AllStartableClassicRoleTypes,
+                GamePackTypes.Coven => AllStartableCovenRoleTypes,
+                GamePackTypes.All => AllStartableRoleTypes,
             };
+        }
+        /// <summary>Gets the intersection of all the available role types in the provided game packs that the player can start as.</summary>
+        /// <param name="packTypes">The game pack types of the game whose available startable roles to get.</param>
+        /// <returns>The intersection of all the available role types in the provided game packs.</returns>
+        public IEnumerable<Type> GetAllStartableRoleTypesIntersection(GamePackTypes packTypes)
+        {
+            if (packTypes == default) // 'is' is illegal here without specifying the type whose default literal to compare to
+                return Enumerable.Empty<Type>();
+
+            var result = AllStartableRoleTypes;
+
+            for (var flag = (GamePackTypes)1; flag < GamePackTypes.All; flag = (GamePackTypes)((int)flag << 1))
+            {
+                if ((packTypes & flag) == default)
+                    continue;
+
+                result = result.Intersect(GetAllStartableRoleTypes(flag));
+            }
+
+            return result;
         }
 
         /// <summary>Adds a role type to this dictionary, if it does not exist.</summary>

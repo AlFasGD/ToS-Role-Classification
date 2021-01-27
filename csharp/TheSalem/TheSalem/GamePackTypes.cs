@@ -1,7 +1,10 @@
-﻿namespace TheSalem
+﻿using System;
+
+namespace TheSalem
 {
     /// <summary>Represents a game pack type, i.e. Classic or Coven.</summary>
-    public enum GamePackType
+    [Flags]
+    public enum GamePackTypes
     {
         /// <summary>Represents the Classic game pack.</summary>
         Classic = 1,
