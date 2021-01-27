@@ -7,26 +7,7 @@ namespace TheSalem.Tests
         [Test]
         public void InitializeRoleListTest()
         {
-            var list = new RoleList(new IRoleSlot[]
-            {
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-                RoleAlignment.Any,
-            });
+            var list = RoleListFactory.AllAny;
 
             // Due to randomization, ensure that the generated role lists cover a lot of cases
             for (int i = 0; i < 50; i++)
