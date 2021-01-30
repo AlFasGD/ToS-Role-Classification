@@ -66,17 +66,17 @@ namespace TheSalem
         /// <returns>The generated role list if this role list is valid, otherwise <see langword="null"/>.</returns>
         public RoleList GenerateRandomRoleList(GamePackTypes packTypes)
         {
-            return GenerateRandomRoleList(new RoleDictionary(RoleDictionary.AllAvailableRolesDictionary.GetAllStartableRoleTypesIntersection(packTypes)));
+            return GenerateRandomRoleList(new RoleCollection(RoleCollection.AllAvailableRolesDictionary.GetAllStartableRoleTypesIntersection(packTypes)));
         }
         /// <summary>Generates a random role list from this given role list, replacing wildcard slots with randomly chosen ones fitting the given criteria.</summary>
         /// <param name="availableRoles">The available roles dictionary.</param>
         /// <returns>The generated role list if this role list is valid, otherwise <see langword="null"/>.</returns>
-        public RoleList GenerateRandomRoleList(RoleDictionary availableRoles)
+        public RoleList GenerateRandomRoleList(RoleCollection availableRoles)
         {
             if (!ValidateRoleList(availableRoles, out var remainingSlots))
                 return null;
 
-            var availableRoleTypes = new RoleDictionary(remainingSlots.Where(kvp => kvp.Value > 0).Select(kvp => kvp.Key));
+            var availableRoleTypes = new RoleCollection(remainingSlots.Where(kvp => kvp.Value > 0).Select(kvp => kvp.Key));
 
             var random = new Random();
             var resultingArray = roleSlots.ToArray();
@@ -99,9 +99,9 @@ namespace TheSalem
 
         private bool ValidateRoleList(GamePackTypes packTypes, out ValueCounterDictionary<Type> remainingSlots)
         {
-            return ValidateRoleList(new RoleDictionary(RoleDictionary.AllAvailableRolesDictionary.GetAllStartableRoleTypesIntersection(packTypes)), out remainingSlots);
+            return ValidateRoleList(new RoleCollection(RoleCollection.AllAvailableRolesDictionary.GetAllStartableRoleTypesIntersection(packTypes)), out remainingSlots);
         }
-        private bool ValidateRoleList(RoleDictionary availableRoles, out ValueCounterDictionary<Type> remainingSlots)
+        private bool ValidateRoleList(RoleCollection availableRoles, out ValueCounterDictionary<Type> remainingSlots)
         {
             remainingSlots = new();
             // This exists to prevent impossible role lists like more than 6 Coven roles in a game (since all the Coven roles are unique)

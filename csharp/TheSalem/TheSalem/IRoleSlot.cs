@@ -9,6 +9,6 @@ namespace TheSalem
         /// <param name="availableRoles">The dictionary of available roles the generated role will be from.</param>
         /// <param name="random">The instance of <seealso cref="Random"/> to use to randomly choose the role.</param>
         /// <returns>The randomly generated role.</returns>
-        public Role GenerateRandomRole(RoleDictionary availableRoles, Random random);
+        public Role GenerateRandomRole(RoleCollection availableRoles, Random random);
     }
 }

@@ -38,7 +38,7 @@ namespace TheSalem
         public RoleAlignment(Faction faction)
             : this(faction, Alignment.Any) { }
 
-        public Role GenerateRandomRole(RoleDictionary availableRoles, Random random)
+        public Role GenerateRandomRole(RoleCollection availableRoles, Random random)
         {
             var roles = availableRoles[this];
             return RoleInstancePool.Instance[roles[random.Next(roles.Length)]];

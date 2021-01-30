@@ -25,7 +25,7 @@ namespace TheSalem
         /// <param name="availableRoles">This argument is ignored in this implementation.</param>
         /// <param name="random">This argument is ignored in this implementation.</param>
         /// <returns>This <seealso cref="Role"/> instance.</returns>
-        public Role GenerateRandomRole(RoleDictionary availableRoles, Random random) => this;
+        public Role GenerateRandomRole(RoleCollection availableRoles, Random random) => this;
 
         public static bool IsValidRoleType(Type type) => type.IsSealed && type.IsAssignableTo(typeof(Role));
     }
