@@ -11,14 +11,14 @@ namespace TheSalem
     /// <summary>Represents a role type collection. Provides the ability to index the available roles by their faction or alignment.</summary>
     public class RoleCollection : ICollection<Type>
     {
-        private static readonly RoleCollection defaultDictionary;
+        private static readonly RoleCollection defaultCollection;
 
         /// <summary>Initializes a new role type dictionary with all the available roles in the game.</summary>
-        public static RoleCollection AllAvailableRolesDictionary => new(defaultDictionary);
+        public static RoleCollection AllAvailableRolesCollection => new(defaultCollection);
 
         static RoleCollection()
         {
-            defaultDictionary = new(RoleInstancePool.Instance.AllRoleTypes.Keys);
+            defaultCollection = new(RoleInstancePool.Instance.AllRoleTypes.Keys);
         }
 
         // Consider using FlexibleInitializableValueDictionary, once they are added to Garyon
@@ -51,7 +51,7 @@ namespace TheSalem
             roleTypesByFaction = new();
         }
         /// <summary>Initializes a new instance of the <seealso cref="RoleCollection"/> class with the roles from the specified types.</summary>
-        /// <param name="roleTypes">The types of the roles to add to the dictionary.</param>
+        /// <param name="roleTypes">The types of the roles to add to the collection.</param>
         public RoleCollection(IEnumerable<Type> roleTypes)
             : this()
         {
@@ -60,7 +60,7 @@ namespace TheSalem
                 AddConditionallyValidated(t, false);
         }
         /// <summary>Initializes a new instance of the <seealso cref="RoleCollection"/> class with the roles from the specified <seealso cref="Role"/> instances.</summary>
-        /// <param name="roles">The instances of the roles to add to the dictionary.</param>
+        /// <param name="roles">The instances of the roles to add to the collection.</param>
         public RoleCollection(IEnumerable<Role> roles)
             : this()
         {
@@ -127,7 +127,7 @@ namespace TheSalem
             return roleTypesByAlignment[instance.FullAlignment].Contains(type);
         }
 
-        /// <summary>Adds a role type to this dictionary, if it does not exist.</summary>
+        /// <summary>Adds a role type to this collection, if it does not exist.</summary>
         /// <typeparam name="T">The role type to add.</typeparam>
         /// <returns><see langword="true"/> if the role type was successfully added, otherwise <see langword="false"/>.</returns>
         public bool Add<T>()
@@ -135,7 +135,7 @@ namespace TheSalem
         {
             return AddConditionallyValidated(typeof(T), false);
         }
-        /// <summary>Adds a role type to this dictionary, if it does not exist.</summary>
+        /// <summary>Adds a role type to this collection, if it does not exist.</summary>
         /// <param name="role">The role type to add.</param>
         /// <returns><see langword="true"/> if the role type was successfully added, otherwise <see langword="false"/>.</returns>
         public bool Add(Type role)
@@ -143,7 +143,7 @@ namespace TheSalem
             return AddConditionallyValidated(role, true);
         }
 
-        /// <summary>Removes a role from this dictionary, if it exists.</summary>
+        /// <summary>Removes a role from this collection, if it exists.</summary>
         /// <typeparam name="T">The role type to remove.</typeparam>
         /// <returns><see langword="true"/> if the role type was successfully removed, otherwise <see langword="false"/>.</returns>
         public bool Remove<T>()
@@ -151,14 +151,14 @@ namespace TheSalem
         {
             return Remove(typeof(T));
         }
-        /// <summary>Removes a role from this dictionary, if it exists.</summary>
+        /// <summary>Removes a role from this collection, if it exists.</summary>
         /// <param name="role">The role type to remove.</param>
         /// <returns><see langword="true"/> if the role type was successfully removed, otherwise <see langword="false"/>.</returns>
         public bool Remove(Role role)
         {
             return Remove(role.GetType());
         }
-        /// <summary>Removes a role from this dictionary, if it exists.</summary>
+        /// <summary>Removes a role from this collection, if it exists.</summary>
         /// <param name="role">The role type to remove.</param>
         /// <returns><see langword="true"/> if the role type was successfully removed, otherwise <see langword="false"/>.</returns>
         public bool Remove(Type role)
@@ -174,26 +174,26 @@ namespace TheSalem
             return true;
         }
 
-        /// <summary>Adds a collection of role types to this dictionary.</summary>
+        /// <summary>Adds a collection of role types to this collection.</summary>
         /// <param name="roles">The role types to add.</param>
         public void AddRange(params Type[] roles)
         {
             AddRange((IEnumerable<Type>)roles);
         }
-        /// <summary>Adds a collection of role types to this dictionary.</summary>
+        /// <summary>Adds a collection of role types to this collection.</summary>
         /// <param name="roles">The role types to add.</param>
         public void AddRange(IEnumerable<Type> roles)
         {
             foreach (var r in roles)
                 Add(r);
         }
-        /// <summary>Removes a collection of role types from this dictionary, if they exist.</summary>
+        /// <summary>Removes a collection of role types from this collection, if they exist.</summary>
         /// <param name="roles">The role types to remove.</param>
         public void RemoveRange(params Type[] roles)
         {
             RemoveRange((IEnumerable<Type>)roles);
         }
-        /// <summary>Removes a collection of role types from this dictionary, if they exist.</summary>
+        /// <summary>Removes a collection of role types from this collection, if they exist.</summary>
         /// <param name="roles">The role types to remove.</param>
         public void RemoveRange(IEnumerable<Type> roles)
         {
@@ -201,14 +201,14 @@ namespace TheSalem
                 Remove(r);
         }
 
-        /// <summary>Clears this dictionary.</summary>
+        /// <summary>Clears this collection.</summary>
         public void Clear()
         {
             roleTypesByAlignment.Clear();
             roleTypesByFaction.Clear();
             Count = 0;
         }
-        /// <summary>Removes all role types that belong to the specified faction from this dictionary.</summary>
+        /// <summary>Removes all role types that belong to the specified faction from this collection.</summary>
         /// <param name="faction">The faction that the roles to remove belong to.</param>
         public void ClearFaction(Faction faction)
         {
@@ -218,7 +218,7 @@ namespace TheSalem
             RemoveRange(rolesToRemove);
             Count -= rolesToRemove.Length;
         }
-        /// <summary>Removes all role types that belong to the specified alignment from this dictionary.</summary>
+        /// <summary>Removes all role types that belong to the specified alignment from this collection.</summary>
         /// <param name="alignment">The alignment that the roles to remove belong to.</param>
         public void ClearAlignment(RoleAlignment alignment)
         {

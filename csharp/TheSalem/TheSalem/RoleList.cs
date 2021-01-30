@@ -66,7 +66,7 @@ namespace TheSalem
         /// <returns>The generated role list if this role list is valid, otherwise <see langword="null"/>.</returns>
         public RoleList GenerateRandomRoleList(GamePackTypes packTypes)
         {
-            return GenerateRandomRoleList(new RoleCollection(RoleCollection.AllAvailableRolesDictionary.GetAllStartableRoleTypesIntersection(packTypes)));
+            return GenerateRandomRoleList(new RoleCollection(RoleCollection.AllAvailableRolesCollection.GetAllStartableRoleTypesIntersection(packTypes)));
         }
         /// <summary>Generates a random role list from this given role list, replacing wildcard slots with randomly chosen ones fitting the given criteria.</summary>
         /// <param name="availableRoles">The available roles dictionary.</param>
@@ -99,7 +99,7 @@ namespace TheSalem
 
         private bool ValidateRoleList(GamePackTypes packTypes, out ValueCounterDictionary<Type> remainingSlots)
         {
-            return ValidateRoleList(new RoleCollection(RoleCollection.AllAvailableRolesDictionary.GetAllStartableRoleTypesIntersection(packTypes)), out remainingSlots);
+            return ValidateRoleList(new RoleCollection(RoleCollection.AllAvailableRolesCollection.GetAllStartableRoleTypesIntersection(packTypes)), out remainingSlots);
         }
         private bool ValidateRoleList(RoleCollection availableRoles, out ValueCounterDictionary<Type> remainingSlots)
         {
