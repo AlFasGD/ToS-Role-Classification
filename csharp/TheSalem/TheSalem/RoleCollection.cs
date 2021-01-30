@@ -73,6 +73,7 @@ namespace TheSalem
         {
             roleTypesByAlignment = new(other.roleTypesByAlignment);
             roleTypesByFaction = new(other.roleTypesByFaction);
+            Count = other.Count;
         }
 
         /// <summary>Gets all the available role types in the provided game packs that the player can start as.</summary>
