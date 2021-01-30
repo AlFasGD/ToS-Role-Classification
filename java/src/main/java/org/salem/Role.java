@@ -3,8 +3,10 @@ package org.salem;
 import org.salem.common.Casing;
 
 import java.lang.reflect.Modifier;
+import java.util.Random;
 
-public interface Role extends RoleListEntry
+public interface Role
+    extends RoleSlot
 {
     public default String getRoleName()
     {
@@ -12,8 +14,8 @@ public interface Role extends RoleListEntry
     }
 
     public abstract RoleAlignment getFullAlignment();
-    public default Faction getFaction() { return getFullAlignment().RoleFaction; }
-    public default Alignment getAlignment() { return getFullAlignment().RoleAlignment; }
+    public default Faction getFaction() { return getFullAlignment().roleFaction; }
+    public default Alignment getAlignment() { return getFullAlignment().roleAlignment; }
 
     public default boolean canStartAs() { return true; }
     public default boolean isUnique() { return false; }
@@ -24,6 +26,9 @@ public interface Role extends RoleListEntry
 
     public default boolean covenDLCExclusive() { return false; }
     public default boolean unavailableInCovenDLC() { return false; }
+
+    @Override
+    public default Role generateRandomRole(RoleCollection availableRoles, Random random) { return this; }
 
     public static <T extends Role> boolean isValidRoleType(Class<T> type)
     {
