@@ -32,9 +32,11 @@ namespace TheSalem
         /// <returns>The dictionary containing this collection's role types grouped by their faction.</returns>
         public Dictionary<Faction, HashSet<Type>> GetRoleTypesByFaction() => new(roleTypesByFaction);
 
-        /// <summary>Gets all the available role types in the game that the player can start as.</summary>
-        public IEnumerable<Type> AllStartableRoleTypes => this.Where(t => RoleInstancePool.Instance[t].CanStartAs);
-        /// <summary>Gets all the available non-Coven-DLC-exclusive role types in the game that the player can start as.</summary>
+        /// <summary>Gets all the contained role types in the game.</summary>
+        public IEnumerable<Type> AllRoleTypes => roleTypesByAlignment.Values.Flatten();
+        /// <summary>Gets all the contained role types in the game that the player can start as.</summary>
+        public IEnumerable<Type> AllStartableRoleTypes => AllRoleTypes.Where(t => RoleInstancePool.Instance[t].CanStartAs);
+        /// <summary>Gets all the contained non-Coven-DLC-exclusive role types in the game that the player can start as.</summary>
         public IEnumerable<Type> AllStartableClassicRoleTypes => AllStartableRoleTypes.Where(t => !RoleInstancePool.Instance[t].CovenDLCExclusive);
         /// <summary>Gets all the role types in the game that are available in the Coven DLC that the player can start as.</summary>
         public IEnumerable<Type> AllStartableCovenRoleTypes => AllStartableRoleTypes.Where(t => !RoleInstancePool.Instance[t].NotInCovenDLC);
@@ -246,7 +248,7 @@ namespace TheSalem
         }
 
         #region ICollection Implementation
-        public IEnumerator<Type> GetEnumerator() => roleTypesByAlignment.Values.Flatten().GetEnumerator();
+        public IEnumerator<Type> GetEnumerator() => AllRoleTypes.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         void ICollection<Type>.Add(Type item) => Add(item);
@@ -259,6 +261,7 @@ namespace TheSalem
                     return;
 
                 array[current] = t;
+                current++;
             }
         }
         #endregion

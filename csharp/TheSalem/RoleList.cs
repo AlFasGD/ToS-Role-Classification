@@ -69,7 +69,7 @@ namespace TheSalem
             return GenerateRandomRoleList(new RoleCollection(RoleCollection.AllAvailableRolesCollection.GetAllStartableRoleTypesIntersection(packTypes)));
         }
         /// <summary>Generates a random role list from this given role list, replacing wildcard slots with randomly chosen ones fitting the given criteria.</summary>
-        /// <param name="availableRoles">The available roles dictionary.</param>
+        /// <param name="availableRoles">The available roles collection.</param>
         /// <returns>The generated role list if this role list is valid, otherwise <see langword="null"/>.</returns>
         public RoleList GenerateRandomRoleList(RoleCollection availableRoles)
         {
