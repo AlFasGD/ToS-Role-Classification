@@ -84,7 +84,7 @@ namespace TheSalem
             {
                 var roleEntry = resultingArray[i];
 
-                var role =  roleEntry.GenerateRandomRole(availableRoleTypes, random);
+                var role = roleEntry.GenerateRandomRole(availableRoleTypes, random);
                 resultingArray[i] = role;
 
                 var type = role.GetType();
