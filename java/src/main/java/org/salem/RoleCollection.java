@@ -9,15 +9,6 @@ import java.util.stream.Collectors;
 public class RoleCollection
     implements Collection<Class<? extends Role>>
 {
-    // TODO:
-    /*
-        - Fix syntax errors (DONE)
-        - Transform C# XML doc to JavaDoc (DONE)
-        - Implement Collection (DONE)
-        - Rename to RoleCollection (DONE)
-        - Sort members according to preference
-     */
-
     private static final RoleCollection defaultCollection;
 
     /**
