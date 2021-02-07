@@ -90,8 +90,9 @@ namespace TheSalem
 
             builder.Add(RoleAlignment.Any);
 
+            int offset = builder.RoleSlots.Count - 2;
             for (int i = 0; i < 7; i++)
-                builder.RoleSlots.Add(builder.RoleSlots[^(i + 2)]);
+                builder.RoleSlots.Add(builder.RoleSlots[offset - i]);
 
             return builder.ToRoleList();
         }
